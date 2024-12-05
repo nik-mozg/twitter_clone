@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  app:
+    build: . 
+    container_name: twitter-clone-app
+    ports:
+      - "8000:8000" 
+    volumes:
+      - .:/app  
+    environment:
+      - DATABASE_URL=postgresql://postgres:1234@db:5432/microblog  
+    depends_on:
+      - db 
+    command: >
+      /bin/bash -c "
+        # Ждем, пока база данных будет готова
+        until nc -z -v -w30 db 5432; do
+          echo 'Waiting for database connection...';
+          sleep 1;
+        done;
+        # Выполняем скрипт populate_db.py
+        python3 populate_db.py &&
+        # Запуск приложения
+        uvicorn app.main:app --host 0.0.0.0 --port 8000
+      "
+
+
+  db:
+    image: postgres:13 
+    container_name: twitter-clone-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1234
+      POSTGRES_DB: microblog
+    volumes:
+      - postgres_data:/var/lib/postgresql/data 
+    ports:
+      - "5432:5432"  
+
+volumes:
+  postgres_data:  

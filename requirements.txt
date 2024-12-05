@@ -1,0 +1,21 @@
+# requirements.txt
+# Основные зависимости для приложения
+fastapi==0.115.4
+uvicorn==0.32.0
+sqlalchemy==2.0.35
+pydantic==2.9.2
+python-dotenv==1.0.1
+asyncpg==0.30.0
+python-multipart==0.0.17
+alembic==1.13.3
+# Для работы с базой данных
+psycopg2-binary==2.9.10  
+
+# Зависимости для тестирования
+pytest==8.3.3
+pytest-asyncio==0.24.0 
+pytest-cov==6.0.0  
+httpx==0.27.0  
+factory_boy==3.3.1  
+
+ruff==0.7.4
